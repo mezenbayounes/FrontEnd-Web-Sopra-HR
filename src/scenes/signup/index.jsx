@@ -24,35 +24,32 @@ const Signup = () => {
 
   const handleFormSubmit = async (values) => {
     let statusCode = 0;
-
+  
     try {
-      const response = await Axios.post("http://localhost:3000/auth/signup", values);
+      const formData = new FormData();
+      formData.append("image", values.image); // Append the file object to the FormData
+  
+      // Append other form fields
+      Object.keys(values).forEach((key) => {
+        if (key !== "image") {
+          formData.append(key, values[key]);
+        }
+      });
+  
+      const response = await Axios.post("http://localhost:3000/auth/signup", formData);
       statusCode = response.status;
       console.log("User signed up successfully:", response.data);
-
-      if (response.status === 200) {
-        console.log(response.data);
         navigate("/login");
-      }
+      
     } catch (error) {
-      if (error.response) {
-        // If there is a response from the server
-        statusCode = error.response.status;
-        console.error("Error signing up:", error.response.data);
-        // Handle different status codes here
-        if (error.response.status === 400) {
-          setError("Bad Request. Please check your input.");
-        } else {
-          setError("An error occurred. Please try again later.");
-        }
+      if (error.response && error.response.status === 409) {
+        setError("User already exists. Please choose a different username or email.");
       } else {
-        // If there is no response from the server (e.g., network error)
-        console.error("Network error:", error.message);
-        setError("Signup failed. Please check your internet connection.");
+        setError("An error occurred. Please try again later.");
       }
     }
   };
-
+  
   return (
     <Box
       sx={{
@@ -116,30 +113,46 @@ const Signup = () => {
                   gap="25px"
                 >
      
-                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography sx={{ flex: 1 }}>Upload Image</Typography>
-                    <input
-                      accept="image/*"
-                      style={{ display: 'none' }}
-                      id="contained-button-file"
-                      type="file"
-                      onChange={(event) => {
-                        setFieldValue("image", event.currentTarget.files[0]);
-                        setSelectedImage(URL.createObjectURL(event.currentTarget.files[0]));
-                      }}
-                    />
-                    <label htmlFor="contained-button-file">
-                      <IconButton
-                        aria-label="upload picture"
-                        component="span"
-                      >
-                        <Add />
-                      </IconButton>
-                    </label>
-                  </Box>
-                  {selectedImage && (
-                    <img src={selectedImage} alt="Uploaded" style={{ width: '100%' }} />
-                  )}
+     <Box sx={{ display: 'flex', alignItems: 'center' }}>
+  <Typography sx={{ flex: 1 }}>Upload Image</Typography>
+  <input
+    accept="image/*"
+    style={{ display: 'none' }}
+    id="contained-button-file"
+    type="file"
+    name="image"
+    onChange={(event) => {
+      const selectedFile = event.currentTarget.files[0];
+      if (selectedFile) { 
+        try {
+          console.log(selectedFile.path);
+          setFieldValue("image", selectedFile);
+          setSelectedImage(URL.createObjectURL(selectedFile));
+          
+        } catch (error) {
+          console.error("Error processing selected image:", error);
+          // Handle the error, such as displaying an error message to the user
+        }
+      } else {
+        console.error("No file selected");
+        // Handle the case where no file is selected, such as displaying a message to the user
+      }
+    }}
+  />
+  <label htmlFor="contained-button-file">
+    <IconButton
+      aria-label="upload picture"
+      component="span"
+    >
+      <Add />
+    </IconButton>
+  </label>
+</Box>
+{selectedImage && (
+  <img src={selectedImage} alt="Uploaded" style={{width: '10%' }} />
+  
+)}
+
                   <TextField
                     fullWidth
                     variant="outlined"
@@ -219,8 +232,9 @@ const Signup = () => {
                     helperText={touched.role && errors.role}
                     sx={{ borderRadius: 20 }}
                   >
+                    <MenuItem value="admin">Admin</MenuItem>
                     <MenuItem value="manager">Manager</MenuItem>
-                    <MenuItem value="line_manager">Line Manager</MenuItem>
+                    <MenuItem value="ligne_manager">Line Manager</MenuItem>
                     <MenuItem value="employee">Employee</MenuItem>
                   </TextField>
                 </Box>
@@ -229,10 +243,10 @@ const Signup = () => {
                     Sign Up
                   </Button>
                   {error && (
-                    <Box sx={{ color: "red", mt: 1 }}>
-                      {error}
-                    </Box>
-                  )}
+  <Box sx={{ color: "red", mt: 1 }}>
+    {error}
+  </Box>
+)}
                   <Link to="/login" style={{ textDecoration: 'none', marginTop: '10px' }}>
                     <Typography variant="body1" color="primary">
                       Already have an account? Login

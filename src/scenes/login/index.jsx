@@ -44,13 +44,11 @@ const Login = () => {
         // Handle different status codes here
         if (error.response.status === 401) {
           setError("Unauthorized. Please check your credentials");
-        } if (error.response.status === 404) {
-          setError("Unauthorized. User not found");
-        }
-        if (error.response.status === 403) {
-          setError("Unauthorized.Please verifie Your account");
-        }
-        else {
+        } else if (error.response.status === 404) {
+          setError("User not found");
+        } else if (error.response.status === 403) {
+          setError("Unauthorized. Please verify your account");
+        } else {
           setError("An error occurred. Please try again later.");
         }
       } else {
@@ -59,6 +57,7 @@ const Login = () => {
         setError("Login failed. Please check your internet connection.");
       }
     }
+    
   };
   
   
