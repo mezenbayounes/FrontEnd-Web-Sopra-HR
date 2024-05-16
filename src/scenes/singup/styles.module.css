@@ -1,0 +1,147 @@
+	.signup_container {
+		width: 100%;
+		min-height: 100vh;
+		background-image: url('https://i.pinimg.com/originals/ef/81/14/ef81144dc32630b24b717de204691df9.jpg');
+		background-repeat: no-repeat;
+		background-size: cover;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+			
+	}
+
+	.signup_form_container {
+		width: 800px;
+		height: 500px;
+		display: flex;
+		border-radius: 10px;
+		box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%),
+			0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+	}
+
+	.left {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background-image: linear-gradient(to left, #5e01b5, orange);
+		border-top-left-radius: 10px;
+		border-bottom-left-radius: 10px;
+	}
+
+	.left h1 {
+		margin-top: 0;
+		color: white;
+		font-size: 35px;
+		align-self: center;
+	}
+
+	.right {
+		flex: 2;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background-color: white;
+		border-top-right-radius: 10px;
+		border-bottom-right-radius: 10px;
+	}
+
+	.form_container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.form_container h1 {
+		font-size: 40px;
+		margin-top: 0;
+	}
+
+	.input {
+		outline: none;
+		border: none;
+		width: 370px;
+		padding: 15px;
+		border-radius: 10px;
+		background-color: #edf5f3;
+		margin: 5px 0;
+		font-size: 14px;
+	}
+
+	.error_msg,
+	.success_msg {
+		width: 370px;
+		padding: 15px;
+		margin: 5px 0;
+		font-size: 14px;
+		background-color: #f34646;
+		color: white;
+		border-radius: 5px;
+		text-align: center;
+	}
+
+	.success_msg {
+		background-color: #5cdd5c;
+	}
+
+	.white_btn,
+	.green_btn {
+		border: none;
+		outline: none;
+		padding: 12px 0;
+		background-color: rgb(255, 255, 255);
+		border-radius: 20px;
+		width: 180px;
+		font-weight: bold;
+		font-size: 14px;
+		cursor: pointer;
+	}
+
+	.green_btn {
+		background-image: linear-gradient(to left, #5e01b5, orange);
+		color: white;
+		margin: 10px;
+	}
+
+	.image_input_container {
+		display: flex;
+		align-items: center;
+	}
+	
+	.image_preview {
+		flex: 1;
+		padding-right: 10px;
+	}
+	
+	.input_container {
+		flex: 1;
+		padding-left: 10px;
+	}
+	
+	.user_image {
+		width: 120px;
+		height: 120px;
+		object-fit: cover;
+		border-radius: 60px;
+	}
+	
+	.image_input {
+		display: none;
+	}
+	.form_containerl {
+		overflow: auto;
+	}
+	.scrollable_form {
+		height: 400px; /* Set the desired height */
+		overflow: auto;
+		scrollbar-width: thin; /* For Firefox */
+		scrollbar-color: transparent transparent; /* For Firefox */
+		-ms-overflow-style: none; /* For Internet Explorer and Edge */
+		scrollbar-width: none; /* For Internet Explorer and Edge */
+	  }
+	  
+	  .scrollable_form::-webkit-scrollbar {
+		width: 0; /* For Chrome, Safari, and Opera */
+	  }

@@ -22,61 +22,27 @@ const Team = () => {
         },
       };
 
-      const response = await axios.get("http://localhost:3000/auth/GetAllUser", config);
-      setMockDataTeam(response.data.users); // Update the data in the state
+      const response = await axios.get("http://localhost:3000/plateau/GetAllPlateaux", config);
+      setMockDataTeam(response.data); // Update the data in the state
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     fetchData();
   }, []);
 
   const columns = [
     { field: "id", headerName: "ID" },
-    { field: "username", headerName: "Name", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
-    {
-      field: "role",
-      headerName: "Access Level",
-      flex: 1,
-      renderCell: ({ row: { role } }) => {
-        return (
-          <Box
-            width="60%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              role === "admin"
-                ? colors.greenAccent[600]
-                : role === "manager"
-                  ? colors.greenAccent[700]
-                  : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {role === "manager" && <SecurityOutlinedIcon />}
-            {role === "ligne_manager" && <SecurityOutlinedIcon />}
-            {role === "employee" && <LockOpenOutlinedIcon />}
-  <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-    {role === "ligne_manager" ? "Ligne Manager" : role}
-   
-   
-
-  </Typography>
-          </Box>
-        );
-      },
-    },
+    { field: "id_manager", headerName: "ID Manager", flex: 1 },
+    { field: "nmbr_de_partie", headerName: "number of parts", flex: 1 },
+    
   ];
 
   return (
     <Box m="20px">
-      <Header title="TEAM" subtitle="Managing the Team Members" />
+      <Header title="Work Space " subtitle="Managing The Work Spaces" />
       <Box
         m="40px 0 0 0"
         height="75vh"

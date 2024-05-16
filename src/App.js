@@ -13,7 +13,12 @@ import Pie from "./scenes/pie";
 import FAQ from "./scenes/faq";
 import Geography from "./scenes/geography";
 import Login from "./scenes/login";
-import Signup from "./scenes/signup";
+import Signup from "./scenes/singup";
+import ForgotPassword from "./scenes/forget_password";
+import ConfirmOTPforgetPassword from "./scenes/confirme_opt_FP";
+import Plateau from "./scenes/plateaux";
+import Equipe from "./scenes/add_equipe";
+
 
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
@@ -29,8 +34,10 @@ function App() {
 
   // Set isSidebar to false if the current path is '/login', otherwise set it to true
   useState(() => {
-    setIsSidebarLogin(location.pathname !== '/login' && location.pathname !== '/signup');
-    setIsTopbarLogin(location.pathname !== '/login' && location.pathname !== '/signup');
+    setIsSidebarLogin(location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/forgetPassword'&& location.pathname !== '/ConfirmOTPforgetPassword');
+    setIsTopbarLogin(location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/forgetPassword'&& location.pathname !== '/ConfirmOTPforgetPassword');
+    
+
    
   
   }, [location.pathname]);
@@ -49,6 +56,12 @@ function App() {
             <Routes>
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/forgetPassword" element={<ForgotPassword />} />
+              <Route path="/ConfirmOTPforgetPassword" element={<ConfirmOTPforgetPassword />} />
+              <Route path="/plateau" element={<Plateau />} />
+              <Route path="/equipe" element={<Equipe />} />
+
+
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />
               <Route path="/contacts" element={<Contacts />} />
