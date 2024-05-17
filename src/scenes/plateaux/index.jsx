@@ -14,22 +14,25 @@ const Team = () => {
   const [mockDataTeam, setMockDataTeam] = useState([]);
 
   const fetchData = async () => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTg5Mjk0NiwiZXhwIjoxNzE1ODk2NTQ2fQ.4EH8_oxeKr1mpzfydbOmsvWiV7hFTbLJyuYDlsWpPME";
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTkzOTUwNSwiZXhwIjoxNzE1OTU3NTA1fQ.I6xmUcSxIjpSowtmH7sh4o-rX3H3jh3jg9AayIkGWY0";
+    
     try {
+     
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-
+   
       const response = await axios.get("http://localhost:3000/plateau/GetAllPlateaux", config);
       setMockDataTeam(response.data); // Update the data in the state
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
+  
   useEffect(() => { 
+   
     fetchData();
   }, []);
 

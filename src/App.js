@@ -18,6 +18,7 @@ import ForgotPassword from "./scenes/forget_password";
 import ConfirmOTPforgetPassword from "./scenes/confirme_opt_FP";
 import Plateau from "./scenes/plateaux";
 import Equipe from "./scenes/add_equipe";
+import AddPlateau from "./scenes/add_plateau";
 
 
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -60,7 +61,9 @@ function App() {
               <Route path="/ConfirmOTPforgetPassword" element={<ConfirmOTPforgetPassword />} />
               <Route path="/plateau" element={<Plateau />} />
               <Route path="/equipe" element={<Equipe />} />
+              <Route path="/AddPlateau" element={<AddPlateau />} />
 
+              
 
               <Route path="/" element={<Dashboard />} />
               <Route path="/team" element={<Team />} />

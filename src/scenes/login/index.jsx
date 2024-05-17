@@ -40,16 +40,12 @@ const Login = () => {
   return (
     <div className={styles.login_container}>
       <div className={styles.login_form_container}>
-        <div className={styles.login_image_container}>
-         
-        </div>
+        <div className={styles.login_image_container}></div>
         <div className={styles.left}>
-        <img src={sopraLogo} alt="Sopra" className={styles.sopra_logo} />
+          <img src={sopraLogo} alt="Sopra" className={styles.sopra_logo} />
           <form className={styles.form_container} onSubmit={handleSubmit}>
-            <br>  
-           
-            </br>
-          <h1 style={{ color: "#5e01b5" }}>Login</h1>
+            <br />
+            <h1 style={{ color: "#5e01b5" }}>Login</h1>
             <input
               type="email"
               placeholder="Email"
@@ -73,6 +69,9 @@ const Login = () => {
               Sign In
             </button>
           </form>
+          <Link to="/forgetPassword" className={styles.forget_password_link}>
+            Forget Password?
+          </Link>
         </div>
         <div className={styles.right}>
           <h1>New Account</h1>
