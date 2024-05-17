@@ -13,7 +13,7 @@ const AddPlateau = () => {
     const fetchLineManagers = async () => {
       try {
         const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTkzOTUwNSwiZXhwIjoxNzE1OTU3NTA1fQ.I6xmUcSxIjpSowtmH7sh4o-rX3H3jh3jg9AayIkGWY0";
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTk1NzYyMywiZXhwIjoxNzE1OTc1NjIzfQ.wrdfPRS9sNtL-txZH5FChTwOXfWLdK1pfbdU6qxD7Hc";
         const response = await axios.get(
           "http://localhost:3000/auth/GetAllLineManagers",
           {
@@ -70,8 +70,14 @@ const AddPlateau = () => {
 
   return (
     <Box m="20px">
-      <h1>CREATE USER</h1>
-      <h2>Create a New User Profile</h2>
+        <Box display="flex" justifyContent="center">
+        <h1>CREATE WORK SPACE</h1>
+      </Box>
+      <br></br>
+      <br></br>
+      <br></br>
+
+      <h2>Create a New SPACE</h2>
 
       <Formik
         initialValues={{ numberOfParts: "" }}
@@ -80,42 +86,52 @@ const AddPlateau = () => {
       >
         {({ handleSubmit, values }) => (
           <form onSubmit={handleSubmit}>
-            <Field
-              as={TextField}
-              select
-              fullWidth
-              variant="filled"
-              label="Line Manager"
-              name="lineManager"
-              value={selectedLineManager}
-              onChange={(event) => setSelectedLineManager(event.target.value)}
-              helperText={<ErrorMessage name="lineManager" />}
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignItems="center"
+              maxWidth="400px"
+              mx="auto"
             >
-              {lineManagers.map((manager) => (
-                <MenuItem
-                  key={manager.id}
-                  value={`${manager.id}-${manager.username}`}
-                >
-                  {`${manager.id} - ${manager.username}`}
-                </MenuItem>
-              ))}
-            </Field>
+              <Field
+                as={TextField}
+                select
+                fullWidth
+                variant="filled"
+                label="Line Manager"
+                name="lineManager"
+                value={selectedLineManager}
+                onChange={(event) => setSelectedLineManager(event.target.value)}
+                helperText={<ErrorMessage name="lineManager" />}
+                sx={{ mb: 2 }}
+              >
+                {lineManagers.map((manager) => (
+                  <MenuItem
+                    key={manager.id}
+                    value={`${manager.id}-${manager.username}`}
+                  >
+                    {`${manager.id} - ${manager.username}`}
+                  </MenuItem>
+                ))}
+              </Field>
 
-            <Field
-              as={TextField}
-              fullWidth
-              variant="filled"
-              type="number"
-              label="Number of Parts"
-              name="numberOfParts"
-              error={touched.numberOfParts && !values.numberOfParts}
-              onBlur={() => setTouched({ numberOfParts: true })}
-              helperText={<ErrorMessage name="numberOfParts" />}
-            />
+              <Field
+                as={TextField}
+                fullWidth
+                variant="filled"
+                type="number"
+                label="Number of Parts"
+                name="numberOfParts"
+                error={touched.numberOfParts && !values.numberOfParts}
+                onBlur={() => setTouched({ numberOfParts: true })}
+                helperText={<ErrorMessage name="numberOfParts" />}
+                sx={{ mb: 2 }}
+              />
 
-            <Button type="submit" variant="contained" color="primary">
-              Submit
-            </Button>
+              <Button type="submit" variant="contained" color="primary">
+                Add New Work Space
+              </Button>
+            </Box>
           </form>
         )}
       </Formik>

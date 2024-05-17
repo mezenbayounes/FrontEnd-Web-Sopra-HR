@@ -1,165 +1,278 @@
-import { Box, Button, TextField } from "@mui/material";
-import { Formik } from "formik";
-import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
+import React, { useState, useEffect } from "react";
+import { Box, Typography, useTheme, MenuItem, FormControl, Select, IconButton, TextField } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import { tokens } from "../../theme";
+import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
+import LockOpenOutlinedIcon from "@mui/icons-material/LockOpenOutlined";
+import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import Header from "../../components/Header";
-import Axios from "axios"; // Import Axios
+import axios from "axios";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import { Formik, Field, ErrorMessage } from "formik";
 
-const Equipe = () => {
-  const isNonMobile = useMediaQuery("(min-width:600px)");
+const Plateau = () => {
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
+  const [mockDataTeam, setMockDataTeam] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [managers, setManagers] = useState([]);
+  const [lineManagers, setLineManagers] = useState([]);
+  const [selectedManager, setSelectedManager] = useState("");
+  const [selectedLineManager, setSelectedLineManager] = useState("");
+  const [plateaux, setPlateaux] = useState([]);
+  const [selectedPlateau, setSelectedPlateau] = useState("");
 
-  const handleFormSubmit = async (values) => {
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTk1NzYyMywiZXhwIjoxNzE1OTc1NjIzfQ.wrdfPRS9sNtL-txZH5FChTwOXfWLdK1pfbdU6qxD7Hc"; // Replace with secure token retrieval
+
+  const fetchPlateaux = async () => {
     try {
-    
-      // Make a POST request to your backend API
-      const response = await Axios.post("http://localhost:3000/auth/login",values);
-      console.log("User created successfully:", response.data);
-      // Handle success scenario, like showing a success message or redirecting
+      const config = {
+        headers: {
+          Authorization: `${token}`,
+        },
+      };
+      const response = await axios.get("http://localhost:3000/plateau/GetAllPlateaux", config);
+      setPlateaux(response.data);
     } catch (error) {
-     
-      console.error("Error creating user:", error);
-      // Handle error scenario, like showing an error message to the user
+      console.error("Error fetching plateaux:", error);
     }
-  };  
+  };
+
+  const fetchManagers = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get("http://localhost:3000/auth/GetAllManagers", config);
+      setManagers(response.data.Managers);
+    } catch (error) {
+      console.error("Error fetching managers:", error);
+    }
+  };
+
+  const fetchLineManagers = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get("http://localhost:3000/auth/GetAllLineManagers", config);
+      setLineManagers(response.data.lineManagers);
+    } catch (error) {
+      console.error("Error fetching line managers:", error);
+    }
+  };
+
+  const fetchData = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const response = await axios.get("http://localhost:3000/auth/GetAllEmployees", config);
+      setMockDataTeam(response.data.employees);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchManagers();
+    fetchLineManagers();
+    fetchPlateaux();
+  }, []);
+
+  const handleSelectionModelChange = (selection) => {
+    setSelectedIds(selection);
+  };
+
+  const handleAddEquipe = async (values) => {
+    const { numberOfParts } = values;
+    const [idManager] = selectedManager.split("-");
+    const [idLineManager] = selectedLineManager.split("-");
+console.log(idManager);
+console.log(idLineManager);
+console.log(selectedIds);
+console.log(numberOfParts);
+
+
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/equipe/CreateEquipe",
+        {
+          idManager: parseInt(idManager),
+          idLigneManager: parseInt(idLineManager),
+          employees: selectedIds,
+          idPlateau: parseInt(selectedPlateau),
+          Partie: parseInt(numberOfParts),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Response from CreatePlateau:", response.data);
+    } catch (error) {
+      console.error("Error creating plateau:", error);
+    }
+  };
+
+  const columns = [
+    { field: "id", headerName: "ID" },
+    { field: "username", headerName: "Name", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1 },
+    {
+      field: "role",
+      headerName: "Access Level",
+      flex: 1,
+      renderCell: ({ row: { role } }) => (
+        <Box
+          width="60%"
+          m="0 auto"
+          p="5px"
+          display="flex"
+          justifyContent="center"
+          backgroundColor={
+            role === "admin"
+              ? colors.greenAccent[600]
+              : role === "manager"
+              ? colors.greenAccent[700]
+              : colors.greenAccent[700]
+          }
+          borderRadius="4px"
+        >
+          {role === "admin" && <AdminPanelSettingsOutlinedIcon />}
+          {role === "manager" && <SecurityOutlinedIcon />}
+          {role === "ligne_manager" && <SecurityOutlinedIcon />}
+          {role === "employee" && <LockOpenOutlinedIcon />}
+          <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+            {role === "ligne_manager" ? "Ligne Manager" : role}
+          </Typography>
+        </Box>
+      ),
+    },
+  ];
 
   return (
     <Box m="20px">
-      <Header title="Create Team" subtitle="Create a New User Team" />
-
+      <Header
+        title={
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6" sx={{ fontSize: "38px" }}>
+              Add Teams
+            </Typography>
+            <IconButton type="submit" form="add-equipe-form">
+              <AddBoxIcon style={{ fontSize: 45 }} />
+            </IconButton>
+          </Box>
+        }
+        subtitle="Create New Team"
+      />
       <Formik
-        onSubmit={handleFormSubmit}
-        initialValues={initialValues}
-        validationSchema={checkoutSchema}
+        initialValues={{ numberOfParts: '' }}
+        onSubmit={handleAddEquipe}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <form onSubmit={handleSubmit}>
-            <Box
-              display="grid"
-              gap="30px"
-              gridTemplateColumns="repeat(4, minmax(0, 1fr))"
-              sx={{
-                "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
-              }}
-            >
-              <TextField
+        {({ values, setFieldTouched, handleChange, handleSubmit }) => (
+          <form id="add-equipe-form" onSubmit={handleSubmit}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb="20px">
+              <FormControl sx={{ minWidth: 200 }}>
+                <Select
+                  value={selectedManager}
+                  onChange={(event) => {
+                    setSelectedManager(event.target.value);
+                  }}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Select Manager" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select Manager
+                  </MenuItem>
+                  {managers.map((manager) => (
+                    <MenuItem key={manager.id} value={`${manager.id}-${manager.username}`}>
+                      {`${manager.id} - ${manager.username}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl sx={{ minWidth: 200 }}>
+                <Select
+                  value={selectedLineManager}
+                  onChange={(event) => {
+                    setSelectedLineManager(event.target.value);
+                  }}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Select Line Manager" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select Line Manager
+                  </MenuItem>
+                  {lineManagers.map((manager) => (
+                    <MenuItem key={manager.id} value={`${manager.id}-${manager.username}`}>
+                      {`${manager.id} - ${manager.username}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <FormControl sx={{ minWidth: 200 }}>
+                <Select
+                  value={selectedPlateau}
+                  onChange={(event) => {
+                    setSelectedPlateau(event.target.value);
+                  }}
+                  displayEmpty
+                  inputProps={{ "aria-label": "Select work space ID" }}
+                >
+                  <MenuItem value="" disabled>
+                    Select Work Space ID
+                  </MenuItem>
+                  {plateaux.map((plateau) => (
+                    <MenuItem key={plateau.id} value={plateau.id}>
+                      {plateau.id}
+                    </MenuItem>
+                  ))}
+                </Select>
+                
+              </FormControl>
+              <FormControl sx={{ minWidth: 200 }}>
+              <Field
+                as={TextField}
                 fullWidth
                 variant="filled"
-                type="text"
-                label="First Name"
-                onBlur={handleBlur}
+                type="number"
+                label="Part"
+                name="numberOfParts"
+                value={values.numberOfParts}
                 onChange={handleChange}
-                value={values.firstName}
-                name="firstName"
-                error={!!touched.firstName && !!errors.firstName}
-                helperText={touched.firstName && errors.firstName}
-                sx={{ gridColumn: "span 2" }}
+                onBlur={() => setFieldTouched("numberOfParts", true)}
+                helperText={<ErrorMessage name="numberOfParts" />}
+                sx={{ mb: 2 }}
               />
-             <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Last Name"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.lastName}
-                name="lastName"
-                error={!!touched.lastName && !!errors.lastName}
-                helperText={touched.lastName && errors.lastName}
-                sx={{ gridColumn: "span 2" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Email"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.email}
-                name="email"
-                error={!!touched.email && !!errors.email}
-                helperText={touched.email && errors.email}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Contact Number"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.contact}
-                name="contact"
-                error={!!touched.contact && !!errors.contact}
-                helperText={touched.contact && errors.contact}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="password"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.password}
-                name="password"
-                error={!!touched.password && !!errors.password}
-                helperText={touched.password && errors.password}
-                sx={{ gridColumn: "span 4" }}
-              />
-              <TextField
-                fullWidth
-                variant="filled"
-                type="text"
-                label="Address 2"
-                onBlur={handleBlur}
-                onChange={handleChange}
-                value={values.address2}
-                name="address2"
-                error={!!touched.address2 && !!errors.address2}
-                helperText={touched.address2 && errors.address2}
-                sx={{ gridColumn: "span 4" }}
-              />
+              </FormControl>
             </Box>
-            <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Create New User
-              </Button>
-            </Box>
+            
           </form>
         )}
       </Formik>
+      <div style={{ height: 500, width: "100%" }}>
+        <DataGrid
+          rows={mockDataTeam}
+          columns={columns}
+          pageSize={10}
+          checkboxSelection
+          disableSelectionOnClick
+          selectionModel={selectedIds}
+          onSelectionModelChange={handleSelectionModelChange}
+        />
+      </div>
     </Box>
   );
 };
 
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-
-const checkoutSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  contact: yup
-    .string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("required"),
-    password: yup.string().required("required"),
-  address2: yup.string().required("required"),
-});
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  contact: "",
-  password: "",
-  address2: "",
-};
-
-export default Equipe;
+export default Plateau;

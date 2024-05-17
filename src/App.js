@@ -17,8 +17,10 @@ import Signup from "./scenes/singup";
 import ForgotPassword from "./scenes/forget_password";
 import ConfirmOTPforgetPassword from "./scenes/confirme_opt_FP";
 import Plateau from "./scenes/plateaux";
-import Equipe from "./scenes/add_equipe";
+import Equipe from "./scenes/equipe";
 import AddPlateau from "./scenes/add_plateau";
+import AddEquipe from "./scenes/add_equipe";
+
 
 
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -62,6 +64,7 @@ function App() {
               <Route path="/plateau" element={<Plateau />} />
               <Route path="/equipe" element={<Equipe />} />
               <Route path="/AddPlateau" element={<AddPlateau />} />
+              <Route path="/AddEquipe" element={<AddEquipe />} />
 
               
 

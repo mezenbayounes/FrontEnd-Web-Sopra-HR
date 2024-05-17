@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
@@ -12,9 +12,11 @@ const Plateau = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [mockDataTeam, setMockDataTeam] = useState([]);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchData = async () => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTkzOTUwNSwiZXhwIjoxNzE1OTU3NTA1fQ.I6xmUcSxIjpSowtmH7sh4o-rX3H3jh3jg9AayIkGWY0";
+    const token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTk1NzYyMywiZXhwIjoxNzE1OTc1NjIzfQ.wrdfPRS9sNtL-txZH5FChTwOXfWLdK1pfbdU6qxD7Hc";
     try {
       const config = {
         headers: {
@@ -22,7 +24,10 @@ const Plateau = () => {
         },
       };
 
-      const response = await axios.get("http://localhost:3000/auth/GetAllUser", config);
+      const response = await axios.get(
+        "http://localhost:3000/auth/GetAllUser",
+        config
+      );
       setMockDataTeam(response.data.users); // Update the data in the state
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -32,6 +37,13 @@ const Plateau = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleSelectionModelChange = (selection) => {
+    setSelectedIds(selection);
+    console.log(selection); // Print selected IDs in the console
+
+    console.log("Selected IDs:", selection.join(", ")); // Print selected IDs in the console
+  };
 
   const columns = [
     { field: "id", headerName: "ID" },
@@ -53,8 +65,8 @@ const Plateau = () => {
               role === "admin"
                 ? colors.greenAccent[600]
                 : role === "manager"
-                  ? colors.greenAccent[700]
-                  : colors.greenAccent[700]
+                ? colors.greenAccent[700]
+                : colors.greenAccent[700]
             }
             borderRadius="4px"
           >
@@ -62,12 +74,9 @@ const Plateau = () => {
             {role === "manager" && <SecurityOutlinedIcon />}
             {role === "ligne_manager" && <SecurityOutlinedIcon />}
             {role === "employee" && <LockOpenOutlinedIcon />}
-  <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-    {role === "ligne_manager" ? "Ligne Manager" : role}
-   
-   
-
-  </Typography>
+            <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
+              {role === "ligne_manager" ? "Ligne Manager" : role}
+            </Typography>
           </Box>
         );
       },
@@ -90,8 +99,14 @@ const Plateau = () => {
           // additional styling...
         }}
       >
-        <DataGrid checkboxSelection rows={mockDataTeam} columns={columns} />
+        <DataGrid
+          checkboxSelection
+          rows={mockDataTeam}
+          columns={columns}
+          onSelectionModelChange={handleSelectionModelChange}
+        />
       </Box>
+      
     </Box>
   );
 };
