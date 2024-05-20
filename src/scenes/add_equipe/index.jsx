@@ -22,7 +22,7 @@ const Plateau = () => {
   const [plateaux, setPlateaux] = useState([]);
   const [selectedPlateau, setSelectedPlateau] = useState("");
 
-  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTk1NzYyMywiZXhwIjoxNzE1OTc1NjIzfQ.wrdfPRS9sNtL-txZH5FChTwOXfWLdK1pfbdU6qxD7Hc"; // Replace with secure token retrieval
+  const token =JSON.parse(localStorage.getItem("token")).token;
 
   const fetchPlateaux = async () => {
     try {

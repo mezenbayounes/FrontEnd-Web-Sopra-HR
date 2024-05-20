@@ -15,8 +15,8 @@ const Plateau = () => {
   const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchData = async () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTk1NzYyMywiZXhwIjoxNzE1OTc1NjIzfQ.wrdfPRS9sNtL-txZH5FChTwOXfWLdK1pfbdU6qxD7Hc";
+    const token =JSON.parse(localStorage.getItem("token")).token;
+
     try {
       const config = {
         headers: {

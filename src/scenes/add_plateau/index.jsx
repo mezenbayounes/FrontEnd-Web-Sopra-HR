@@ -8,12 +8,14 @@ const AddPlateau = () => {
   const [lineManagers, setLineManagers] = useState([]);
   const [selectedLineManager, setSelectedLineManager] = useState("");
   const [touched, setTouched] = useState({ numberOfParts: false });
+  const token =JSON.parse(localStorage.getItem("token")).token;
 
+
+  
   useEffect(() => {
     const fetchLineManagers = async () => {
       try {
-        const token =
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTk1NzYyMywiZXhwIjoxNzE1OTc1NjIzfQ.wrdfPRS9sNtL-txZH5FChTwOXfWLdK1pfbdU6qxD7Hc";
+       
         const response = await axios.get(
           "http://localhost:3000/auth/GetAllLineManagers",
           {
@@ -40,9 +42,7 @@ const AddPlateau = () => {
     console.log("Number of Parts:", numberOfParts);
 
     try {
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjYsImlhdCI6MTcxNTkzOTUwNSwiZXhwIjoxNzE1OTU3NTA1fQ.I6xmUcSxIjpSowtmH7sh4o-rX3H3jh3jg9AayIkGWY0";
-
+     
       const response = await axios.post(
         "http://localhost:3000/plateau/CreatePlateau",
         {

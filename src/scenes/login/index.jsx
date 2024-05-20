@@ -24,8 +24,11 @@ const Login = () => {
     try {
       const url = "http://localhost:3000/auth/login";
       const response = await axios.post(url, data);
-      localStorage.setItem("token", response.data.data);
-      window.location = "/";
+      console.log( "mezen",response.data);
+
+      localStorage.setItem("token", JSON.stringify(response.data));
+      console.log( JSON.parse(localStorage.getItem("token")).token);
+     window.location = "/";
     } catch (error) {
       if (
         error.response &&
