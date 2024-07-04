@@ -20,8 +20,8 @@ import Plateau from "./scenes/plateaux";
 import Equipe from "./scenes/equipe";
 import AddPlateau from "./scenes/add_plateau";
 import AddEquipe from "./scenes/add_equipe";
-
-
+import Candidat from "./scenes/Candidat";
+import Profile from "./scenes/Profile";
 
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./theme";
@@ -69,6 +69,8 @@ function App() {
               
 
               <Route path="/" element={<Dashboard />} />
+              <Route path="/candidat" element={<Candidat />} />
+              <Route path="/Profile/:id" element={<Profile />} />
               <Route path="/team" element={<Team />} />
               <Route path="/contacts" element={<Contacts />} />
               <Route path="/invoices" element={<Invoices />} />
