@@ -21,7 +21,7 @@ const Profile = () => {
             <Box m="5px">
                  
                 {/* IMAGE */}
-                <Grid item xs={12} md={12} style={{ display: 'flex', justifyContent: 'center', marginBottom: '5px' }}>
+                <Grid item xs={14} md={14} style={{  justifyContent: 'center', marginBottom: '5px' }}>
                 {candidate.Texte_CV?.Images.map((image, index) => (
   <Box key={index} p="10px">
 <img
@@ -29,9 +29,12 @@ const Profile = () => {
     alt={`extracted-${index}`}
     style={{
         width: "150px",
-        borderRadius: "60%" // Définit le bord de l'image comme circulaire
+        height: "150px", // Assurez-vous que la hauteur et la largeur sont identiques pour obtenir une image parfaitement ronde
+        borderRadius: "50%", // Définit le bord de l'image comme circulaire
+        objectFit: "cover" // S'assure que l'image couvre toute la zone
     }}
-/>  </Box>
+/>
+</Box>
  
             ))}    
                         </Grid>
