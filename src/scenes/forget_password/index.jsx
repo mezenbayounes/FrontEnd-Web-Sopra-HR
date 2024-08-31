@@ -53,8 +53,8 @@ const ForgotPassword = () => {
 
           {error && <div className={styles.error_msg}>{error}</div>}
           {msg && <div className={styles.success_msg}>{msg}</div>}
-
-          <button type="submit" className={styles.green_btn}>
+<br></br>
+          <button type="submit" className={styles.white_btn}>
             Send OTP
           </button>
         </form>

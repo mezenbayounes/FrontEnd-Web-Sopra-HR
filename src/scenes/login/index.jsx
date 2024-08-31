@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-import sopraLogo from "./sopra_hr_bw.png"; // Replace "sopraLogo.png" with the path to your Sopra logo image
+import sopraLogo from "./sopra_hr.png"; // Replace "sopraLogo.png" with the path to your Sopra logo image
+import adminimage from "../login/admin.png"; // Replace "adminimage.png" with the path to your admin image
 
 const Login = () => {
   const [data, setData] = useState({
@@ -10,6 +11,7 @@ const Login = () => {
     password: "",
   });
   const [error, setError] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,20 +26,23 @@ const Login = () => {
     try {
       const url = "http://localhost:3000/auth/login";
       const response = await axios.post(url, data);
-      console.log( "mezen",response.data);
-
       localStorage.setItem("token", JSON.stringify(response.data));
-      console.log( JSON.parse(localStorage.getItem("token")).token);
-     window.location = "/";
+      window.location = "/";
     } catch (error) {
-      if (
-        error.response &&
-        error.response.status >= 400 &&
-        error.response.status <= 500
-      ) {
-        setError(error.response.data.message);
+      if (error.response) {
+        // Extract error message from response
+        const errorMessage = error.response.data.error || "An unexpected error occurred";
+        setError(errorMessage);
+        setShowPopup(true);
+      } else {
+        setError("An unexpected error occurred");
+        setShowPopup(true);
       }
     }
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
   return (
@@ -48,7 +53,7 @@ const Login = () => {
           <img src={sopraLogo} alt="Sopra" className={styles.sopra_logo} />
           <form className={styles.form_container} onSubmit={handleSubmit}>
             <br />
-            <h1 style={{ color: "#5e01b5" }}>Login</h1>
+            <h1 style={{ color: "#ff8000" }}>Login</h1>
             <input
               type="email"
               placeholder="Email"
@@ -67,7 +72,6 @@ const Login = () => {
               required
               className={styles.input}
             />
-            {error && <div className={styles.error_msg}>{error}</div>}
             <button type="submit" className={styles.green_btn}>
               Sign In
             </button>
@@ -77,14 +81,20 @@ const Login = () => {
           </Link>
         </div>
         <div className={styles.right}>
-          <h1>New Account</h1>
-          <Link to="/signup">
-            <button type="button" className={styles.white_btn}>
-              Sign Up
-            </button>
-          </Link>
+          <img src={adminimage} alt="admin" className={styles.image} />
+          <h1>Welcome Back</h1>
         </div>
       </div>
+      {showPopup && (
+        <div className={styles.popup}>
+          <div className={styles.popup_content}>
+            <span className={styles.close_button} onClick={handleClosePopup}>
+              &times;
+            </span>
+            <p style={{ color: "red" }}>{error}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

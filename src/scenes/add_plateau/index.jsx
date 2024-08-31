@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, MenuItem, TextField } from "@mui/material";
+import { Box, Button, MenuItem, TextField, Dialog, DialogContent, DialogTitle, DialogActions, Typography } from "@mui/material";
 import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -8,14 +8,15 @@ const AddPlateau = () => {
   const [lineManagers, setLineManagers] = useState([]);
   const [selectedLineManager, setSelectedLineManager] = useState("");
   const [touched, setTouched] = useState({ numberOfParts: false });
-  const token =JSON.parse(localStorage.getItem("token")).token;
+  const [openDialog, setOpenDialog] = useState(false); // Dialog state
+  const [dialogContent, setDialogContent] = useState(""); // Content for dialog
+  const [isSuccess, setIsSuccess] = useState(false); // Success or failure state
 
+  const token = JSON.parse(localStorage.getItem("token")).token;
 
-  
   useEffect(() => {
     const fetchLineManagers = async () => {
       try {
-       
         const response = await axios.get(
           "http://localhost:3000/auth/GetAllLineManagers",
           {
@@ -42,7 +43,6 @@ const AddPlateau = () => {
     console.log("Number of Parts:", numberOfParts);
 
     try {
-     
       const response = await axios.post(
         "http://localhost:3000/plateau/CreatePlateau",
         {
@@ -58,9 +58,17 @@ const AddPlateau = () => {
 
       console.log("Response from CreatePlateau:", response.data);
 
-      // Handle the response as needed...
+      // Set success message and open dialog
+      setDialogContent("Work space created successfully!");
+      setIsSuccess(true);
+      setOpenDialog(true);
     } catch (error) {
       console.error("Error creating plateau:", error);
+
+      // Set error message and open dialog
+      setDialogContent("Failed to create work space.");
+      setIsSuccess(false);
+      setOpenDialog(true);
     }
   };
 
@@ -70,12 +78,12 @@ const AddPlateau = () => {
 
   return (
     <Box m="20px">
-        <Box display="flex" justifyContent="center">
+      <Box display="flex" justifyContent="center">
         <h1>CREATE WORK SPACE</h1>
       </Box>
-      <br></br>
-      <br></br>
-      <br></br>
+      <br />
+      <br />
+      <br />
 
       <h2>Create a New SPACE</h2>
 
@@ -135,6 +143,29 @@ const AddPlateau = () => {
           </form>
         )}
       </Formik>
+
+      {/* Dialog for success/failure */}
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+      >
+        <DialogTitle>Operation Status</DialogTitle>
+        <DialogContent>
+          <Typography
+            style={{
+              color: isSuccess ? "green" : "red", // Green for success, red for failure
+              fontWeight: "bold",
+            }}
+          >
+            {dialogContent}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

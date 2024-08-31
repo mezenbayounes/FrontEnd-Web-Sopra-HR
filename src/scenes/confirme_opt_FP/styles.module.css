@@ -86,13 +86,17 @@
 	}
 
 	.white_btn{
-		border: none;
-		outline: none;
-		padding: 12px 0;
-		border-radius: 20px;
-		font-weight: bold;
-		font-size: 14px;
-		cursor: pointer;
+		
+			border: none;
+			outline: none;
+			padding: 12px 0;
+			background-color: rgb(255, 255, 255);
+			border-radius: 20px;
+			width: 180px;
+			font-weight: bold;
+			font-size: 14px;
+			cursor: pointer;
+		
 	}
 	.green_btn {
 		background-image: linear-gradient(to left, #5e01b5, orange);
@@ -152,19 +156,34 @@
 	  }
 	  /* styles.module.css */
 
-.forgot_password_container {
-	display: flex;
-	background-image: url('https://i.pinimg.com/originals/ef/81/14/ef81144dc32630b24b717de204691df9.jpg');
-
-	justify-content: center;
-	align-items: center;
-	height: 100vh;
-  }
+	  .forgot_password_container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		height: 100vh;
+		position: relative; /* To position the pseudo-element */
+		z-index: 1; /* Ensures content is above the background */
+	}
+	
+	.forgot_password_container::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-image: url('/public/assets/bgg.jpg'); /* Path to your local image */
+		background-repeat: no-repeat;
+		background-size: cover;
+		opacity: 0.5; /* Control the opacity here */
+		z-index: -1; /* Keeps the image behind the content */
+	}
+	
   
   .center_container {
 	width: 650px;
-	background-image: linear-gradient(to left, #5e01b5, orange);
-	height: 350px;
+	background-image: linear-gradient(to left, red, orange);
+	height: 380px;
 	padding: 80px;
 	border-radius: 60px;
 
@@ -178,13 +197,20 @@
 	
 
   }
-  
   .input {
 	width: 100%;
 	padding: 10px;
 	margin-bottom: 10px;
-	background-color: rgb(238, 227, 227);
-  }
+	background-color: white; /* White background */
+	color: black; /* Black text */
+	border: none;
+	outline: none;
+}
+
+.input::placeholder {
+	color: rgb(5, 5, 5); /* Gray placeholder (hint) text */
+}
+
   
   .error_msg {
 	color: red;

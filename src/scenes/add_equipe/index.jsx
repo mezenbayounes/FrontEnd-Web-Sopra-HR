@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, useTheme, MenuItem, FormControl, Select, IconButton, TextField } from "@mui/material";
+import { Box, Typography, useTheme, MenuItem, FormControl, Select, IconButton, TextField, Dialog, DialogActions, DialogContent, DialogTitle, Button } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
 import AdminPanelSettingsOutlinedIcon from "@mui/icons-material/AdminPanelSettingsOutlined";
@@ -9,6 +9,7 @@ import Header from "../../components/Header";
 import axios from "axios";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import { Formik, Field, ErrorMessage } from "formik";
+import * as Yup from 'yup';
 
 const Plateau = () => {
   const theme = useTheme();
@@ -22,7 +23,12 @@ const Plateau = () => {
   const [plateaux, setPlateaux] = useState([]);
   const [selectedPlateau, setSelectedPlateau] = useState("");
 
-  const token =JSON.parse(localStorage.getItem("token")).token;
+  // State for dialog
+  const [openDialog, setOpenDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState("");
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const token = JSON.parse(localStorage.getItem("token")).token;
 
   const fetchPlateaux = async () => {
     try {
@@ -95,11 +101,6 @@ const Plateau = () => {
     const { numberOfParts } = values;
     const [idManager] = selectedManager.split("-");
     const [idLineManager] = selectedLineManager.split("-");
-console.log(idManager);
-console.log(idLineManager);
-console.log(selectedIds);
-console.log(numberOfParts);
-
 
     try {
       const response = await axios.post(
@@ -118,9 +119,14 @@ console.log(numberOfParts);
         }
       );
 
-      console.log("Response from CreatePlateau:", response.data);
+      setDialogContent("Equipe created successfully!");
+      setIsSuccess(true); // Set success state
+      setOpenDialog(true);
     } catch (error) {
-      console.error("Error creating plateau:", error);
+      console.error("Error creating equipe:", error);
+      setDialogContent("Failed to create equipe.");
+      setIsSuccess(false); // Set failure state
+      setOpenDialog(true);
     }
   };
 
@@ -160,6 +166,10 @@ console.log(numberOfParts);
     },
   ];
 
+  const validationSchema = Yup.object({
+    numberOfParts: Yup.number().required("Number of parts is required").positive().integer(),
+  });
+
   return (
     <Box m="20px">
       <Header
@@ -177,6 +187,7 @@ console.log(numberOfParts);
       />
       <Formik
         initialValues={{ numberOfParts: '' }}
+        validationSchema={validationSchema}
         onSubmit={handleAddEquipe}
       >
         {({ values, setFieldTouched, handleChange, handleSubmit }) => (
@@ -238,25 +249,23 @@ console.log(numberOfParts);
                     </MenuItem>
                   ))}
                 </Select>
-                
               </FormControl>
               <FormControl sx={{ minWidth: 200 }}>
-              <Field
-                as={TextField}
-                fullWidth
-                variant="filled"
-                type="number"
-                label="Part"
-                name="numberOfParts"
-                value={values.numberOfParts}
-                onChange={handleChange}
-                onBlur={() => setFieldTouched("numberOfParts", true)}
-                helperText={<ErrorMessage name="numberOfParts" />}
-                sx={{ mb: 2 }}
-              />
+                <Field
+                  as={TextField}
+                  fullWidth
+                  variant="filled"
+                  type="number"
+                  label="Part"
+                  name="numberOfParts"
+                  value={values.numberOfParts}
+                  onChange={handleChange}
+                  onBlur={() => setFieldTouched("numberOfParts", true)}
+                  helperText={<ErrorMessage name="numberOfParts" />}
+                  sx={{ mb: 2 }}
+                />
               </FormControl>
             </Box>
-            
           </form>
         )}
       </Formik>
@@ -271,6 +280,29 @@ console.log(numberOfParts);
           onSelectionModelChange={handleSelectionModelChange}
         />
       </div>
+
+      {/* Dialog for success/failure */}
+      <Dialog
+        open={openDialog}
+        onClose={() => setOpenDialog(false)}
+      >
+        <DialogTitle>Operation Status</DialogTitle>
+        <DialogContent>
+          <Typography
+            style={{
+              color: isSuccess ? "green" : "red", // Apply green color for success, red for failure
+              fontWeight: "bold",
+            }}
+          >
+            {dialogContent}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };

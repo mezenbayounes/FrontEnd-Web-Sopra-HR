@@ -37,8 +37,8 @@ function App() {
 
   // Set isSidebar to false if the current path is '/login', otherwise set it to true
   useState(() => {
-    setIsSidebarLogin(location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/forgetPassword'&& location.pathname !== '/ConfirmOTPforgetPassword');
-    setIsTopbarLogin(location.pathname !== '/login' && location.pathname !== '/signup' && location.pathname !== '/forgetPassword'&& location.pathname !== '/ConfirmOTPforgetPassword');
+    setIsSidebarLogin(location.pathname !== '/login' && location.pathname !==  '/forgetPassword'&& location.pathname !== '/ConfirmOTPforgetPassword');
+    setIsTopbarLogin(location.pathname !== '/login' && location.pathname !=='/forgetPassword'&& location.pathname !== '/ConfirmOTPforgetPassword');
     
 
    

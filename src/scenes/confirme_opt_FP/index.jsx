@@ -131,6 +131,8 @@ const ConfirmOTPforgetPassword = () => {
                 </div>
                 <br>
                 </br>
+                <br>
+                </br>
                 <TextField
   type={showPassword ? "text" : "password"}
   placeholder="New Password"
@@ -146,11 +148,20 @@ const ConfirmOTPforgetPassword = () => {
         </IconButton>
       </InputAdornment>
     ),
+    style: { 
+      backgroundColor: 'white', // Set the background to white
+      color: 'black', // Set the text color to black
+    },
+  }}
+  InputLabelProps={{
+    style: { color: 'gray' } // Set the placeholder (label) text to gray
   }}
   className={styles.input}
 />
+
                 <br></br>
-                <button type="submit" className={styles.green_btn}>
+
+                <button type="submit" className={styles.white_btn}>
             Send OTP
           </button>
               </form>

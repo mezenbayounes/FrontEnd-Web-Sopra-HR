@@ -115,7 +115,12 @@ const Candidat = () => {
                 key={index}
                 src={`http://localhost:5000/images/${image}`}
                 alt={`Image ${index}`}
-                style={{ width: 50, height: 50, marginRight: 5 }}
+                style={{
+                  width: "40px",
+                  height: "40px", // Assurez-vous que la hauteur et la largeur sont identiques pour obtenir une image parfaitement ronde
+                  borderRadius: "30%", // Définit le bord de l'image comme circulaire
+                  objectFit: "cover" // S'assure que l'image couvre toute la zone
+              }}
               />
             ))}
           </Box>
@@ -133,6 +138,10 @@ const Candidat = () => {
       headerName: "Score",
       minWidth: 130,
       flex: 1,
+      renderCell: (params) => {
+        const formattedScore = `${Math.round(params.value)}%`;
+        return <Typography>{formattedScore}</Typography>;
+    },
     },
     {
       field: "Tel",

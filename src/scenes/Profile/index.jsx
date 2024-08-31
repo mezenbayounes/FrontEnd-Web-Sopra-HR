@@ -30,7 +30,7 @@ const Profile = () => {
     style={{
         width: "150px",
         height: "150px", // Assurez-vous que la hauteur et la largeur sont identiques pour obtenir une image parfaitement ronde
-        borderRadius: "50%", // Définit le bord de l'image comme circulaire
+        borderRadius: "30%", // Définit le bord de l'image comme circulaire
         objectFit: "cover" // S'assure que l'image couvre toute la zone
     }}
 />
