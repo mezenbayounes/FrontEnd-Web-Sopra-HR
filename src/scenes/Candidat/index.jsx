@@ -4,6 +4,9 @@ import {
   Typography,
   Button,
   TextField,
+  CircularProgress,
+  Dialog,
+
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -24,7 +27,8 @@ const Candidat = () => {
   const [descriptionFile, setDescriptionFile] = useState(null);
   const [tableData, setTableData] = useState([]);
   const sortedData = [...tableData].sort((a, b) => b.Score - a.Score);
- 
+  const [loading, setLoading] = useState(false);  // Track loading state
+
   const location = useLocation();
   const navigate = useNavigate();
  
@@ -81,6 +85,8 @@ const Candidat = () => {
     Array.from(cvFiles).forEach((file) => {
       formData.append("cvFiles", file);
     });
+    setLoading(true); // Start loading
+
  
     try {
       const response = await fetch("http://localhost:5000/compare", {
@@ -100,7 +106,9 @@ const Candidat = () => {
       localStorage.setItem("tableData", JSON.stringify(data));
     } catch (error) {
       console.error("Error sending files:", error);
-    }
+    }finally{setLoading(false); 
+
+    }// Stop loading}
   };
  
   const columns = [
@@ -347,7 +355,19 @@ const Candidat = () => {
  
  
       </Box>
- 
+  {/* Loading popup */}
+      <Dialog open={loading}>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          p={2}
+          sx={{ minWidth: '200px' }}
+        >
+          <CircularProgress />
+          <Typography sx={{ ml: 2 }}>Processing...Please Wait </Typography>
+        </Box>
+      </Dialog>
      
     </Box>
   );
