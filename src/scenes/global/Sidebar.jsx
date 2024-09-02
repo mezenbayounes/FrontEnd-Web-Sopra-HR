@@ -12,8 +12,7 @@ import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import WorkspacesSharpIcon from "@mui/icons-material/WorkspacesSharp";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import GroupAddIcon from "@mui/icons-material/GroupAdd";
-
+import DomainAddIcon from '@mui/icons-material/DomainAdd';
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -120,7 +119,7 @@ const Sidebar = () => {
           <Box paddingLeft={isCollapsed ? undefined : "15%"}>
             <Item
               title="Home"
-              to="/"
+              to="/Dashboard"
               icon={<HomeOutlinedIcon />}
               selected={selected}
               setSelected={setSelected}
@@ -151,6 +150,13 @@ const Sidebar = () => {
               title="Work Space"
               to="/plateau"
               icon={<WorkspacesSharpIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
+            <Item
+              title="Recruitment"
+              to="/candidat"
+              icon={<DomainAddIcon />}
               selected={selected}
               setSelected={setSelected}
             />

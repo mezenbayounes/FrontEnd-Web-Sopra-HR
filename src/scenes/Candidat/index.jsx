@@ -14,6 +14,8 @@ import SecurityOutlinedIcon from "@mui/icons-material/SecurityOutlined";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import Header from "../../components/Header";
 import { tokens } from "../../theme";
+import SearchIcon from '@mui/icons-material/Search';
+
  
 const Candidat = () => {
   const theme = useTheme();
@@ -206,17 +208,22 @@ const Candidat = () => {
       field: "Details",
       headerName: "Details",
       minWidth: 100,
-      flex: 1,
+      flex: 0,
       renderCell: ({ row }) => {
         return (
           <Button
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => handleDetailsClick(row.id)}
-          >
-            Détails
-          </Button>
+  variant="contained"
+  color="primary"
+  size="small" // Controls overall button size
+  onClick={() => handleDetailsClick(row.id)}
+  sx={{
+    width: '100px',  // Custom width
+    height: '30px'   // Custom height
+  }}
+>
+  Détails
+</Button>
+
         );
       },
     },
@@ -252,89 +259,90 @@ const Candidat = () => {
           },
         }}
       >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="flex-start"
-          mb={2}
-        >
-          <Box display="flex" alignItems="center" mb={2}>
-            <TextField
-              label="Sélectionner une description de poste"
-              variant="outlined"
-              size="small"
-              multiline
-              rows={descriptionFile ? 1 : 0}
-              InputProps={{ readOnly: true }}
-              sx={{ mr: 2, maxWidth: "none", width: "100%" }}
-              value={descriptionFile ? descriptionFile.name : ""}
-            />
-            <input
-              accept="application/pdf"
-              style={{ display: "none" }}
-              id="description-upload"
-              type="file"
-              onChange={handleDescriptionUpload}
-            />
-            <label htmlFor="description-upload">
-              <Button
-                variant="contained"
-                color="primary"
-                component="span"
-                startIcon={<CloudUploadIcon />}
-                sx={{ mr: 3 }}
-              >
-                Upload Description
-              </Button>
-            </label>
-           
-          </Box>
-          <Box
-            display="flex"
-            alignItems="center"
-            className="flex-grow"
-            mb={1}
-          >
-            <TextField
-              label="Sélectionner une liste de CV"
-              variant="outlined"
-              size="small"
-              multiline
-              rows={Math.max(1, cvFiles.length)}
-              InputProps={{ readOnly: true }}
-              sx={{ mr: 2, maxWidth: "none", width: "200%" }}
-              value={cvFiles.length ? `${cvFiles.length} files selected` : ""}
-            />
-            <input
-              accept="application/pdf"
-              style={{ display: "none" }}
-              id="cv-upload"
-              multiple
-              type="file"
-              onChange={handleCVUpload}
-            />
-            <label htmlFor="cv-upload">
-              <Button
-                variant="contained"
-                color="primary"
-                component="span"
-                startIcon={<CloudUploadIcon />}
-                sx={{ mr: 3 }}
-              >
-                Upload CV
-              </Button>
-            </label>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleSend}
-              sx={{ width: "auto", minWidth: "auto" ,backgroundColor: '#db4059' }}
-            >
-              Envoyer
-            </Button>
-           
-          </Box>
-        </Box>
+<Box
+  display="flex"
+  flexDirection="row" // Changed to row for horizontal alignment
+  alignItems="center"
+  mb={2}
+>
+  <Box display="flex" alignItems="center" mb={0} sx={{ mr: 0 }}>
+    <TextField
+      label="Sélectionner une description de poste"
+      variant="outlined"
+      size="small"
+      multiline
+      rows={descriptionFile ? 1 : 0}
+      InputProps={{ readOnly: true }}
+      sx={{ mr: 1, maxWidth: "none", width: "300px" }} // Adjust width to fit
+      value={descriptionFile ? descriptionFile.name : ""}
+    />
+    <input
+      accept="application/pdf"
+      style={{ display: "none" }}
+      id="description-upload"
+      type="file"
+      onChange={handleDescriptionUpload}
+    />
+    <label htmlFor="description-upload">
+      <Button
+        variant="contained"
+        color="primary"
+        component="span"
+        startIcon={<CloudUploadIcon />}
+        sx={{ mr: 2, width: '200px', height: '40px' }}
+      >
+        Upload Description
+      </Button>
+    </label>
+  </Box>
+
+  <Box display="flex" alignItems="center" sx={{ mr: 5 }}>
+    <TextField
+      label="Sélectionner une liste de CV"
+      variant="outlined"
+      size="small"
+      multiline
+      rows={Math.max(1, cvFiles.length)}
+      InputProps={{ readOnly: true }}
+      sx={{ mr: 2, maxWidth: "none", width: "300px" }} // Adjust width to fit
+      value={cvFiles.length ? `${cvFiles.length} files selected` : ""}
+    />
+    <input
+      accept="application/pdf"
+      style={{ display: "none" }}
+      id="cv-upload"
+      multiple
+      type="file"
+      onChange={handleCVUpload}
+    />
+    <label htmlFor="cv-upload">
+      <Button
+        variant="contained"
+        color="primary"
+        component="span"
+        startIcon={<CloudUploadIcon />}
+        sx={{ mr: 1, width: '200px', height: '40px' }}
+      >
+        Upload CV
+      </Button>
+    </label>
+  </Box>
+  <Button
+  variant="contained"
+  color="secondary"
+  onClick={handleSend}
+  startIcon={<SearchIcon />} // Add the search icon here
+  sx={{ 
+    width: '120px',    // Custom width
+    height: '40px',    // Custom height
+    backgroundColor: '#db4059',  // Custom background color
+    minWidth: '120px'  // Ensures the button stays at the specified width
+  }}
+>
+  Filter
+</Button>
+</Box>
+
         <DataGrid checkboxSelection rows={tableData} columns={columns} />
  
  

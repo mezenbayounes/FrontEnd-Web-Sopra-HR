@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./styles.module.css";
-import sopraLogo from "./sopra_hr.png"; // Replace "sopraLogo.png" with the path to your Sopra logo image
-import adminimage from "../login/admin.png"; // Replace "adminimage.png" with the path to your admin image
+import sopraLogo from "./sopra_hr.png";
+import adminimage from "../login/admin.png";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import VisibilityOffOutlinedIcon from "@mui/icons-material/VisibilityOffOutlined";
+import IconButton from "@mui/material/IconButton";
 
 const Login = () => {
   const [data, setData] = useState({
@@ -12,6 +15,21 @@ const Login = () => {
   });
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    const savedPassword = localStorage.getItem("password");
+    if (savedEmail && savedPassword) {
+      setData({ email: savedEmail, password: savedPassword });
+    }
+
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,10 +45,11 @@ const Login = () => {
       const url = "http://localhost:3000/auth/login";
       const response = await axios.post(url, data);
       localStorage.setItem("token", JSON.stringify(response.data));
-      window.location = "/";
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("password", data.password);
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       if (error.response) {
-        // Extract error message from response
         const errorMessage = error.response.data.error || "An unexpected error occurred";
         setError(errorMessage);
         setShowPopup(true);
@@ -43,6 +62,10 @@ const Login = () => {
 
   const handleClosePopup = () => {
     setShowPopup(false);
+  };
+
+  const handleTogglePassword = () => {
+    setShowPassword((prev) => !prev);
   };
 
   return (
@@ -63,15 +86,27 @@ const Login = () => {
               required
               className={styles.input}
             />
-            <input
-              type="password"
-              placeholder="Password"
-              name="password"
-              value={data.password}
-              onChange={handleChange}
-              required
-              className={styles.input}
-            />
+            <div className={styles.password_container}>
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Password"
+                name="password"
+                value={data.password}
+                onChange={handleChange}
+                required
+                className={styles.password_input}
+              />
+              <IconButton
+                onClick={handleTogglePassword}
+                className={styles.password_toggle}
+              >
+                {showPassword ? (
+                  <VisibilityOffOutlinedIcon />
+                ) : (
+                  <VisibilityOutlinedIcon />
+                )}
+              </IconButton>
+            </div>
             <button type="submit" className={styles.green_btn}>
               Sign In
             </button>

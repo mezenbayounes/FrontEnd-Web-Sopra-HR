@@ -262,7 +262,7 @@ const Plateau = () => {
                   onChange={handleChange}
                   onBlur={() => setFieldTouched("numberOfParts", true)}
                   helperText={<ErrorMessage name="numberOfParts" />}
-                  sx={{ mb: 2 }}
+                  sx={{ mb: 0}}
                 />
               </FormControl>
             </Box>

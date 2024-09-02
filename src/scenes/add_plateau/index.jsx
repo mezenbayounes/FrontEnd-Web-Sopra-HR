@@ -18,7 +18,7 @@ const AddPlateau = () => {
     const fetchLineManagers = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:3000/auth/GetAllLineManagers",
+          "http://localhost:3000/auth/GetAllManagers",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -26,7 +26,7 @@ const AddPlateau = () => {
           }
         );
 
-        setLineManagers(response.data.lineManagers);
+        setLineManagers(response.data.Managers);
       } catch (error) {
         console.error("Error fetching line managers:", error);
       }
@@ -106,7 +106,7 @@ const AddPlateau = () => {
                 select
                 fullWidth
                 variant="filled"
-                label="Line Manager"
+                label="Managers"
                 name="lineManager"
                 value={selectedLineManager}
                 onChange={(event) => setSelectedLineManager(event.target.value)}
