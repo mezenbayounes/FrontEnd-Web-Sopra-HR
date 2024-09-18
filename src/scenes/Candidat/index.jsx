@@ -343,7 +343,7 @@ const Candidat = () => {
   sx={{ 
     width: '120px',    // Custom width
     height: '40px',    // Custom height
-    backgroundColor: '#db4059',  // Custom background color
+    backgroundColor: '#e08040	',  // Custom background color
     minWidth: '120px'  // Ensures the button stays at the specified width
   }}
 >

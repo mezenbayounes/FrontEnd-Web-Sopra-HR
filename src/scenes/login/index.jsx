@@ -42,7 +42,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = "http://localhost:3000/auth/login";
+      const url = "http://localhost:3000/auth/loginAdmin";
       const response = await axios.post(url, data);
       localStorage.setItem("token", JSON.stringify(response.data));
       localStorage.setItem("email", data.email);
