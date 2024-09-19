@@ -125,7 +125,7 @@ const Plateau = () => {
             {role === "ligne_manager" && <SecurityOutlinedIcon />}
             {role === "employee" && <LockOpenOutlinedIcon />}
             <Typography color={colors.grey[100]} sx={{ ml: "5px" }}>
-              {role === "ligne_manager" ? "Ligne Manager" : role}
+              {role === "ligne_manager" ? "Line Manager" : role}
             </Typography>
           </Box>
         );
